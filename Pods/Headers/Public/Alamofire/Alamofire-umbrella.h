@@ -1,0 +1,1 @@
+/Users/loyoe/Documents/projecto ios/Test/TareaConstrain/Liverpool/Pods/Target Support Files/Alamofire/Alamofire-umbrella.h
