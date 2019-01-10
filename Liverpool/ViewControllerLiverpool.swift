@@ -12,10 +12,6 @@ import SwiftyJSON
 
 class ViewControllerLiverpool: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
-    
-    
-
-   
     @IBOutlet weak var searchBar: UISearchBar!
     var total = 0
     var listaTodosProductos :JSON = JSON();
@@ -25,9 +21,11 @@ class ViewControllerLiverpool: UIViewController, UISearchBarDelegate {
         searchBar.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.listaTodosProductos = nil
         var url = "https://shoppapp.liverpool.com.mx/appclienteservices/services/v3/plp?search-string=" + searchBar.text! + "&page-number=1"
         
         Alamofire.request(url).responseJSON{ (response) in
@@ -55,7 +53,6 @@ class ViewControllerLiverpool: UIViewController, UISearchBarDelegate {
     
     
 }
-
 extension UIImageView {
     func dowloadFromServer(url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
         contentMode = mode
@@ -87,29 +84,16 @@ extension ViewControllerLiverpool: UITableViewDelegate, UITableViewDataSource{
 
         cell.titulo.text = listaTodosProductos["plpResults"]["records"][indexPath.row]["productDisplayName"].string!
         cell.imagen.dowloadFromServer(link: self.listaTodosProductos["plpResults"]["records"][indexPath.row]["smImage"].string!)
-//        if(self.listaTodosProductos["plpResults"]["records"][indexPath.row]["promoPrice"].string != nil){
-        if let temp = self.listaTodosProductos["plpResults"]["records"][indexPath.row]["listPrice"].double {
-           
-             cell.precio.text = String(temp)
-        } else {
-            print("doesn't contain value")
+        if let precio = self.listaTodosProductos["plpResults"]["records"][indexPath.row]["listPrice"].double{
+           cell.precio.text = "$"+String(precio)
         }
-        
         if let descuento = self.listaTodosProductos["plpResults"]["records"][indexPath.row]["promoPrice"].double{
-            cell.descuento.text = String(descuento)
-        }else{
-            print("no hay")
+            cell.descuento.text = "$"+String(descuento)
         }
-       
-        
-        
-        
-        
-        
-
-    
         return cell
     }
+    
+    
     
     
 }
